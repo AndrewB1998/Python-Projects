@@ -1,0 +1,1 @@
+{"omeletti": [{"kananmuna": 3, "suola": 2, "pippuri": 3}], "omelettiyksikot": [{"kananmuna": "kpl", "suola": "tl", "pippuri": "tl"}]}

@@ -1,0 +1,52 @@
+1	Tehtävän kuvaus ja analysointi
+Harjoitustyön tarkoituksena oli rakentaa monipuolinen reseptimuunnin arkikäyttöön. Ohjelma sisältää valmiita reseptejä joista käyttäjä valitsee joko valmiin reseptin tai oman reseptinsä muuntamista varten. Valinnan jälkeen ohjelma tulostaa reseptin aineosat ja aineosien yksiköt, joista käyttäjä seuraavaksi pääsee kirjoittamalla valitsemaan aineosan, jonka suhteen muunnos tehdään. Tämän jälkeen käyttäjä syöttää valitsemansa määrän aineosaa ja ohjelma tulostaa sen suhteessa koko reseptin aineosat sisältäen myös yksiköt. Ohjelmassa on myös mahdollisuus lisätä oma resepti syöttämällä ”oma” ensimmäiseen kysymyskenttään. Tämän jälkeen käyttäjältä kysytään reseptin nimi, aineosien määrä ja aineosien nimi, yksikkö sekä määrä ja tämä tallentaa reseptin kenttään ”oma resepti”. Tästä edespäin ohjelma etenee muunnosprosessiin. Muunnosprosessin jälkeen käyttäjälle annetaan vielä mahdollisuus aloittaa koko prosessi alusta, eli ohjelma toistaa itseään kunnes käyttäjä päättää lopettaa sen. 
+Tehtävänannossa mainittu mahdollisuus tallentaa reseptejä rajoittui vain yhteen reseptiin. Uusien reseptien lisääminen valmiiden reseptien sekaan muodostui ongelmalliseksi json-tiedostojen muokkausmahdollisuuksien puitteissa ja tämän johdosta järkevämmäksi ratkaisuksi muodostui uuden datatiedoston luominen uusille resepteille. Koska useamman reseptin hallinnoiminen (lisääminen, poistaminen, lukeminen) halutussa muodossa ilmeni haastavammaksi kuin oletin muuttamatta koko ohjelman rakennetta, päätin tyytyä yksinkertaisuuden vuoksi vain yhteen omaan reseptiin. Virheenhallinta nousi suunnitelmassa mahdolliseksi ongelmaksi ja se onnistui halutulla tavalla; ohjelma ei anna edetä ennen kuin haluttu syöte on oikeaoppisesti syötetty.
+Ohjelmaan voisi laajennuksena lisätä reseptien ohjeita, jotka tulostuisivat asteittain, sekä sisältäisi muunnetut määrät reseptin aineosia.
+2	Ratkaisuperiaate
+Tehtävän ratkaisemiseen vaadittiin tapoja, miten reseptit saadaan asetettua käsiteltävään muotoon, omat reseptit saadaan lisättyä käyttäjän toimesta ja kuinka reseptinmuunnos saadaan prosessoitua. Tehtävä vaati metodien kierrätystä; samoja metodeja käyttäen tuli ajaa prosesseja eri alkuarvoilla. Luontevimmin reseptien käsittely onnistui niiden ollessa hajautustaulu-muodossa, jolloin reseptin tietyistä aineosista oli virtaviivaista eristää informaatiota. Input- kenttien avulla saatiin tallennettua vastaukset myöhempää käyttöä varten. Tehtävä vaati myös paljon tiedostoista lukua, ja kirjoittamista, joka hoitui json-tiedoston asettamisesta muuttujiin. 
+
+3	Ohjelman ja sen osien kuvaaminen
+3.1	Ohjelman sisältö ja erillisen ohjelman toiminta
+Ohjelman päämetodi def reseptikone(): sisältää ohjelman koodin ja tämä tulee kutsutuksi tilanteessa, jossa käyttäjä haluaa muunnosprosessin lopussa aloittaa alusta. Ohjelman ydin sijaitsee käskyssä print(aineosat[i],":",maarat[i]*(mitta/maarat[muutettava]),yksikot[i]).
+Muuttujaan aineosat on asetettu metodi index(resepti,aineosat,data), joka etsii valitun reseptin aineosien nimet ja tulostaa ne yksitellen
+Muuttujaan maarat on asetettu metodi valinta(resepti,data) ,joka palauttaa listan reseptin arvoista ja tämä tulee kerrotuksi valitulla määrällä haluttua aineosaa jaettuna halutun aineosan vakioarvolla.
+Muuttujaan yksikot on asetettu metodi yksikot(resepti+"yksikot",data) ,joka palauttaa listana valitun reseptin aineosien yksiköt.
+Ohjelma reseptit.py kirjoittaa valmiit reseptit reseptit.txt tiedostoon hajautustaulu muodossa ja tämä tulee def reseptikone() metodin sisällä asetettua muuttujaan data. omaresepti.txt asetetaan muuttujaan omadata ja muuttujan data tulee syötettyä ehdossa   if resepti ==”oma” . Ohjelman toiminta perustuu käytännössä reseptitiedostojen lukemisesta ja sen datan lisäämisestä tyhjiin listoihin ja näiden käsittelyä käyttäjän antamien syötteiden kannalta.
+3.2	Käyttöliittymä
+Ohjelman käyttöliittymä on toteutettu kysymyspohjaisesti, eli käyttäjän ei tarvitse ennalta tietää miten ohjelma toimii. Ohjelman alkuun on tulostettu ohjelman tarkoitus ja joko kirjoittamalla listatun reseptin tai kirjoittamalla ”oma”, pääsee etenemään seuraavaan vaiheeseen. Muuttujaan resepti on asetettu syötekenttä, joka kysyy käyttäjältä reseptiä ja tämä jakaa ohjelman kolmeen eri vaihtoehtoiseen osaan. Ohjelma tarkistaa onko resepti valmiiksi asetetuissa resepteissä, omassa reseptissä ja jos ei kumpikaan näistä, niin ohjelma tulostaa virheilmoituksen ja kysyy syötettä uudestaan. Jos syöte on ”oma”, siirtyy ohjelma uuden reseptin lisäys vaiheeseen. Ensimmäisen kysymyksen vastaamisen jälkeen ohjelma käsittelee vain reseptiin kuuluvaa dataa ja ajaa metodeja käyttäen niitä.
+3.3	Moduulien kuvaus
+Def reseptikone
+-	Metodi, jonka sisällä ohjelma operoi
+Tietojenkäsittely (with open(…), dump, load)
+-	Ohjelman raakadataa tulee käsiteltyä näillä käskyillä.
+Silmukat (for… in …, while …)
+-	Ohjelmassa asetetaan listoihin ja luetaan listoista dataa useassa kohdassa. Tämä onnistuu yksinkertaisimmin silmukoiden avulla ja hyödyntäen append() ja print() käskyjä
+Def valinta
+-	Metodi, joka lisää reseptin arvot muuttujaan lista
+Def yksikot
+-	Metodi, joka lisää reseptin yksiköt muuttujaan listakaksi
+Def index
+-	metodi joka lisää reseptin aineosat muuttujaan aineosat
+oman reseptin lisäys (if resepti == ”oma”)
+-	Moduuli sisältää listoja oman reseptin aineosille, yksiköille ja määrille. Nämä listat täydentyvät  vaihe kerrallaan käyttäjän syötteiden kautta ja lopulta syöttää datan def omaresepti() metodille, joka asettaa datan hajautustaulu muotoon ja lopulta tiedostojenkäsittely moduuleilla asettaa datan omaresepti.txt ja omadata.txt tiedostoihin.
+Virheentarkistukset (while, except, try)
+-	Virheentarkistus while, except, ja try-lauseilla toimii siten, että ohjelma ei anna edetä ennekuin syöte löytyy valitusta datasta, lukumäärä on kokonaisluku tai desimaaliluku tai syöte on jokin ennalta määritelty syöte
+
+
+	
+
+4	Testausjärjestely
+Jotta ohjelma etenee halutulla tavalla, tulee syötteen olla tarkalleen oikeinkirjoitettu. ”Mikä resepti? :” kysymyksessä ohjelma hyväksyy vain vastauksen, joka on kirjoitettu esitettyjen reseptien kirjoitusasujen mukaisesti. Eli huomioiden isot ja pienet alkukirjaimet sekä välimerkit. Jos syöte ei vastaa rekisterissä olevaa tietoa ohjelma tulostaa ” Reseptiä ei löytynyt. Valitse listasta resepti tai lisää oma resepti” ja silmukka toistaa itseään kunnes syöte löytyy rekisteristä. Ohjelman kohdissa missä pyydetään käyttäjää syöttämään jokin lukumäärä, ohjelma hyväksyy vain float-tyyppisen luvun, eli kokonais- tai murtoluvun ja edellisen esimerkin mukaan toistaa itseään. 
+Testatessa miten ohjelma reagoi suuriin lukumääriin kysymyskentissä, joissa pyydetään lukuarvoa, ohjelma tulostaa kymmenpotenssin kertoimella liitetyn arvon, joka ei selkeästi havainnollista käyttäjälle lukumäärää. Eli ohjelmaan tulisi syöttää vain looginen lukumäärä.
+Jos kokeilemme siirtää pääohjelman erilleen reseptien datasta ja datan lisäysohjelmasta ohjelma tulostaa logon sekä aloitustekstin ja virheilmoituksen reseptit.txt tiedoston puuttumisesta. Tästä päätellen ohjelmaa ei voi käyttää toimivasti ilman aloitusdataa.
+
+5	Liitteet
+5.1	Tehtävänanto
+Reseptimuunnin, jolle syötetään valitusta reseptistä jokin aineosa, jonka suhteessa reseptin muut aineosat muuntuvat. Ohjelmassa olisi mahdollisuus lisätä ja tallentaa omia reseptejä, sekä ohjelma sisältäisi valmiiksi asetettuja reseptejä.
+5.2	Ohjelmalistaus
+Kommentoitu ohjelmalistaus löytyy erillisenä tiedostona tämän palautuksen yhteydessä
+5.3	Ohjelman käyttöohje
+Käyttöohje löytyy erillisenä tiedostona tämän palautuksen yhteydessä
+
+
+

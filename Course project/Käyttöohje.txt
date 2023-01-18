@@ -1,0 +1,3 @@
+ohjelman käyttöohje:
+- pura zip tiedosto kokonaisuudessaan samaan kohteeseen
+- aja tiedosto Harjoitustyö.py 
